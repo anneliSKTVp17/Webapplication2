@@ -5,9 +5,11 @@
  */
 package controller;
 
+
 import entiti.Book;
+import entiti.Reader;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -15,52 +17,100 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import session.BookFacade;
+import session.HistoryFacade;
+import session.ReaderFacade;
 
 /**
  *
- * @author user2
+ * @author user
  */
 @WebServlet(name = "WebController", urlPatterns = {
+    "/",
     "/showAddBook",
-        "/createBook",
+    "/createBook",
+    "/listBooks",
+    "/showAddReader","/createReader","/listReaders",
+    "/showCreateHistory","/createHistory","/listHistory",
+    
 })
 public class WebController extends HttpServlet {
 @EJB BookFacade bookFacade;
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+@EJB ReaderFacade readerFacade;
+@EJB HistoryFacade historyFacade;
+    protected void processRequest(HttpServletRequest request,
+            HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
         String path = request.getServletPath();
         switch (path) {
+             case "/":
+                request.getRequestDispatcher("/index.jsp").forward(request, response);
+                break;
             case "/showAddBook":
                 request.getRequestDispatcher("/showAddBook.jsp")
                         .forward(request, response);
                 break;
             case "/createBook":
-                String name = request.getParameter("name");
+                String name=request.getParameter("name");
                 String author = request.getParameter("author");
                 String isbn = request.getParameter("isbn");
                 String publishedYear = request.getParameter("publishedYear");
                 String quantity = request.getParameter("quantity");
-                Book book = new Book(name, author, isbn, new Integer(publishedYear), new Integer(quantity), new Integer(quantity));
+                Book book = new Book(
+                        name, 
+                        author, 
+                        isbn, 
+                        new Integer(publishedYear),
+                        new Integer(quantity), 
+                        new Integer(quantity)
+                );
                 bookFacade.create(book);
                 request.getRequestDispatcher("/index.jsp")
                         .forward(request, response);
-                
                 break;
-            default:
-                throw new AssertionError();
+            case "/listBooks":
+                List<Book> listBooks = bookFacade.findAll();
+                request.setAttribute("listBooks", listBooks);
+                request.getRequestDispatcher("/listBooks.jsp")
+                        .forward(request, response);
+            break;
+            case "/showAddReader":
+                request.getRequestDispatcher("/showAddReader.jsp").forward(request, response);
+            break;
+            case "/createReader":
+                String firstname=request.getParameter("name");
+                String lastname = request.getParameter("lastname");
+                String phone = request.getParameter("phone");
+                Reader rdr=new Reader(firstname,lastname,phone);
+                readerFacade.create(rdr);
+                request.getRequestDispatcher("/index.jsp")
+                        .forward(request, response);
+            break;
+            case "/listReaders":
+                List<Reader> listReaders = readerFacade.findAll();
+                request.setAttribute("listReaders", listReaders);
+                request.getRequestDispatcher("/listReaders.jsp").forward(request, response);
+            break;
+            
+            
+            
+            case "/showCreateHistory":
+                listBooks = bookFacade.findAll();
+                request.setAttribute("listBooks", listBooks);
+                listReaders = readerFacade.findAll();
+                request.setAttribute("listReaders", listReaders);
+                request.getRequestDispatcher("/showCreateHistory.jsp").forward(request, response);
+            break;
+            case "/createHistory":
+               
+            break;
+            case "/listHistory":
+               
+            break;
+            
         }
-
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

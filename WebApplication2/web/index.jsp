@@ -1,6 +1,6 @@
 <%-- 
-    Document   : index
-    Created on : May 9, 2019, 5:40:57 PM
+    Document   : listReader
+    Created on : May 10, 2019, 7:17:06 PM
     Author     : user2
 --%>
 
@@ -9,10 +9,14 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Добро пожаловать</title>
+           <title>Наша библиотека</title>
     </head>
     <body>
-        <h1>Книги</h1>
-        <a href="showAddBook">Добавить книгу</a>
+        <h1>Добро пожаловать!</h1>
+        <a href="showAddBook">Добавить книгу</a><br>
+        <a href="listBooks">Список книг</a><br>
+        <a href="listReaders">Список читателей</a><br>
+        <a href="showAddReader">Добавить читателей</a><br>
+         <a href="showCreateHistory">Выдать книгу</a><br>
     </body>
 </html>
