@@ -18,5 +18,6 @@
         <a href="listReaders">Список читателей</a><br>
         <a href="showAddReader">Добавить читателей</a><br>
          <a href="showCreateHistory">Выдать книгу</a><br>
+         <a href="listHistory">История выдачи книг</a><br>
     </body>
 </html>

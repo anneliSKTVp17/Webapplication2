@@ -7,8 +7,11 @@ package controller;
 
 
 import entiti.Book;
+import entiti.History;
 import entiti.Reader;
 import java.io.IOException;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
@@ -103,10 +106,19 @@ public class WebController extends HttpServlet {
                 request.getRequestDispatcher("/showCreateHistory.jsp").forward(request, response);
             break;
             case "/createHistory":
-               
+                String strReaderId=request.getParameter("readerId");
+                String strBookId = request.getParameter("bookId");
+                rdr=readerFacade.find( Long.parseLong(strReaderId) );
+                book=bookFacade.find( Long.parseLong(strBookId) );
+                GregorianCalendar clnd=new GregorianCalendar();
+                History history = new History(rdr, book, new Date(), new Date());
+                historyFacade.create(history);
+                request.getRequestDispatcher("/index.jsp").forward(request, response);
             break;
             case "/listHistory":
-               
+               List<History> listHistory = historyFacade.findAll();
+                request.setAttribute("listHistory", listHistory);
+                request.getRequestDispatcher("/listHistory.jsp").forward(request, response);
             break;
             
         }
